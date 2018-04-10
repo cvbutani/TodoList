@@ -1,0 +1,12 @@
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<BorderPane fx:controller="com.chirag.todolist.Controller"
+            xmlns:fx="http://javafx.com/fxml" >
+    <left>
+        <ListView fx:id="toDoListView" onMouseClicked="#toDoDisplay"/>
+    </left>
+    <center>
+        <TextArea fx:id="textDisplay"/>
+    </center>
+</BorderPane>
