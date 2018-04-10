@@ -1,12 +1,16 @@
 package com.chirag.todolist;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +20,8 @@ public class Controller {
     private ListView<Todoitem> toDoListView;
     @FXML
     private TextArea textDisplay;
+    @FXML
+    private Label deadlineLabel;
 
     public void initialize() {
         todoitems = new ArrayList<>();
@@ -32,16 +38,26 @@ public class Controller {
         Todoitem item6 = new Todoitem("Book USA Wichita Trip", "Book ticket to visit CTDI facility in Wichita, Kansas.", LocalDate.of(2018, Month.APRIL, 15));
         todoitems.add(item6);
 
+        toDoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Todoitem>() {
+            @Override
+            public void changed(ObservableValue<? extends Todoitem> observable, Todoitem oldValue, Todoitem newValue) {
+                if(newValue != null){
+                    Todoitem item = toDoListView.getSelectionModel().getSelectedItem();
+                    textDisplay.setText(item.getDetails());
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d,yyyy");
+                    deadlineLabel.setText(df.format(item.getDate()));
+                }
+            }
+        });
+
         toDoListView.getItems().setAll(todoitems);
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        toDoListView.getSelectionModel().selectFirst();
     }
     @FXML
     public void toDoDisplay(){
         Todoitem item = toDoListView.getSelectionModel().getSelectedItem();
-        StringBuilder sb = new StringBuilder(item.getDetails());
-        sb.append("\n\n\n\n\n");
-        sb.append("Due Date: ");
-        sb.append(item.getDate().toString());
-        textDisplay.setText(sb.toString());
+        textDisplay.setText(item.getDetails());
+        deadlineLabel.setText(item.getDate().toString());
     }
 }
