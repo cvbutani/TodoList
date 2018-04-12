@@ -1,4 +1,4 @@
-package com.chirag.todolist;
+package com.chirag.todolist.dataModel;
 
 import java.time.LocalDate;
 
