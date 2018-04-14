@@ -2,6 +2,10 @@ package com.chirag.todolist;
 
 import com.chirag.todolist.dataModel.TodoData;
 import com.chirag.todolist.dataModel.Todoitem;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -25,6 +29,8 @@ public class Controller {
     private Label deadlineLabel;
     @FXML
     private BorderPane mainTodoList;
+    @FXML
+    private ContextMenu listMenu;
 
 
     public void initialize() {
@@ -44,6 +50,33 @@ public class Controller {
 
         TodoData.getInstance().setTodoItems(todoitems);
 */
+        listMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete");
+        MenuItem edititem = new MenuItem("Edit");
+        MenuItem newitem = new MenuItem("New");
+
+        deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Todoitem item = toDoListView.getSelectionModel().getSelectedItem();
+                deleteListedItem(item);
+            }
+        });
+
+        edititem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showEditItemDialog();
+            }
+        });
+
+        newitem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                showNewItemDialog();
+            }
+        });
+        listMenu.getItems().addAll(newitem, edititem, deleteItem);
 
         toDoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -54,7 +87,7 @@ public class Controller {
             }
         });
 
-        toDoListView.getItems().setAll(TodoData.getInstance().getTodoItems());
+        toDoListView.setItems(TodoData.getInstance().getTodoItems());
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
 
@@ -79,6 +112,14 @@ public class Controller {
                                                     }
                                                 }
                                             };
+                                            cell.emptyProperty().addListener(
+                                                    (obs, wasEmpty, isNowEmpty) -> {
+                                                        if (isNowEmpty) {
+                                                            cell.setContextMenu(null);
+                                                        } else {
+                                                            cell.setContextMenu(listMenu);
+                                                        }
+                                                    });
                                             return cell;
                                         }
                                     }
@@ -98,7 +139,6 @@ public class Controller {
         } catch (IOException e) {
             System.out.println("Couldn't Load Dialog.");
             e.printStackTrace();
-            return;
         }
 
         dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
@@ -140,6 +180,17 @@ public class Controller {
             Todoitem editedItem = controller.processResults();
             toDoListView.getSelectionModel().clearSelection();
             toDoListView.getSelectionModel().select(editedItem);
+        }
+    }
+
+    public void deleteListedItem(Todoitem item) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete TodoList Item");
+        alert.setHeaderText("Deleting " + item.getDescription());
+        alert.setContentText("Are you sure?     Press OK to delete.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.OK)) {
+            TodoData.getInstance().deleteInItem(item);
         }
     }
 
