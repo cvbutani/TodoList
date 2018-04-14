@@ -10,20 +10,53 @@
 <?import javafx.scene.control.MenuItem?>
 
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Tooltip?>
 <BorderPane fx:id="mainTodoList" fx:controller="com.chirag.todolist.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <top>
-        <MenuBar>
-            <Menu text="File">
-                <MenuItem text="New" onAction="#showNewItemDialog"/>
-                <MenuItem text="Edit" onAction="#showEditItemDialog"/>
-                <MenuItem text="Exit"/>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="New" onAction="#showNewItemDialog"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Edit" onAction="#showEditItemDialog"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit"/>
+                </Menu>
+            </MenuBar>
+            <ToolBar>
+                <HBox >
+                    <Button onAction="#showNewItemDialog">
+                        <tooltip>
+                            <Tooltip text="Add new Todo Item"/>
+                        </tooltip>
+                    <graphic>
+                        <ImageView>
+                            <Image url="@/toolbarButtonGraphics/general/New24.gif"/>
+                        </ImageView>
+
+                    </graphic>
+                    </Button>
+                    <Button onAction="#showEditItemDialog">
+                        <tooltip>
+                            <Tooltip text="Edit Todo Item"/>
+                        </tooltip>
+                        <graphic>
+                            <ImageView>
+                                <Image url="@/toolbarButtonGraphics/general/Edit24.gif"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </ToolBar>
+        </VBox>
     </top>
     <left>
-        <ListView fx:id="toDoListView" />
+        <ListView fx:id="toDoListView" onKeyPressed="#keyPressed"/>
     </left>
     <center>
         <VBox style="-fx-background-color: white">
