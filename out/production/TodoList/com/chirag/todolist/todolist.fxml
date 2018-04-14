@@ -10,13 +10,12 @@
 <?import javafx.scene.control.MenuItem?>
 
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:id="mainTodoList" fx:controller="com.chirag.todolist.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <top>
@@ -27,7 +26,7 @@
                     <SeparatorMenuItem/>
                     <MenuItem text="Edit" onAction="#showEditItemDialog"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Exit"/>
+                    <MenuItem text="Exit" onAction="#handleExit"/>
                 </Menu>
             </MenuBar>
             <ToolBar>
@@ -53,6 +52,11 @@
                             </ImageView>
                         </graphic>
                     </Button>
+                    <ToggleButton fx:id="filterButton" text="Today's Item" onAction="#filterPressButton">
+                        <tooltip>
+                            <Tooltip text="Press button to see today's todo list"/>
+                        </tooltip>
+                    </ToggleButton>
                 </HBox>
             </ToolBar>
         </VBox>

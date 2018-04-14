@@ -2,24 +2,27 @@ package com.chirag.todolist;
 
 import com.chirag.todolist.dataModel.TodoData;
 import com.chirag.todolist.dataModel.Todoitem;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class Controller {
     private List<Todoitem> todoitems;
@@ -33,10 +36,15 @@ public class Controller {
     private BorderPane mainTodoList;
     @FXML
     private ContextMenu listMenu;
+    @FXML
+    private ToggleButton filterButton;
+    @FXML
+    private FilteredList<Todoitem> filteredList;
 
 
     public void initialize() {
-/*        todoitems = new ArrayList<>();
+/*
+        todoitems = new ArrayList<>();
        Todoitem item1 = new Todoitem("Birthday Card", "Buy a birthday card from dollarama and send it to Sagar.", LocalDate.of(2018, Month.JULY, 12));
         todoitems.add(item1);
         Todoitem item2 = new Todoitem("Call Skip", "Call Skip the dishes and quit from skip network.", LocalDate.of(2018, Month.APRIL, 12));
@@ -52,6 +60,7 @@ public class Controller {
 
         TodoData.getInstance().setTodoItems(todoitems);
 */
+
         listMenu = new ContextMenu();
         MenuItem deleteItem = new MenuItem("Delete");
         MenuItem edititem = new MenuItem("Edit");
@@ -88,8 +97,23 @@ public class Controller {
                 deadlineLabel.setText(df.format(item.getDate()));
             }
         });
+        filteredList = new FilteredList<Todoitem>(TodoData.getInstance().getTodoItems(), new Predicate<Todoitem>() {
+            @Override
+            public boolean test(Todoitem todoitem) {
+                return true;
+            }
+        });
 
-        toDoListView.setItems(TodoData.getInstance().getTodoItems());
+        SortedList<Todoitem> sortedList = new SortedList<Todoitem>(filteredList, new Comparator<Todoitem>() {
+            @Override
+            public int compare(Todoitem o1, Todoitem o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+
+//        toDoListView.setItems(TodoData.getInstance().getTodoItems());
+        toDoListView.setItems(sortedList);
         toDoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         toDoListView.getSelectionModel().selectFirst();
 
@@ -105,11 +129,11 @@ public class Controller {
                                                     } else {
                                                         setText(item.getDescription());
                                                         if (item.getDate().equals(LocalDate.now())) {
-                                                            setTextFill(Color.RED);
+                                                            setTextFill(Color.GREEN);
                                                         } else if (item.getDate().equals(LocalDate.now().plusDays(1))) {
                                                             setTextFill(Color.YELLOW);
                                                         } else if (item.getDate().isBefore(LocalDate.now().plusDays(1))) {
-                                                            setTextFill(Color.GREEN);
+                                                            setTextFill(Color.RED);
                                                         }
                                                     }
                                                 }
@@ -197,10 +221,10 @@ public class Controller {
     }
 
     @FXML
-    public void keyPressed(KeyEvent keyEvent){
+    public void keyPressed(KeyEvent keyEvent) {
         Todoitem selectedItem = toDoListView.getSelectionModel().getSelectedItem();
-        if(selectedItem != null){
-            if(keyEvent.getCode().equals(KeyCode.DELETE)){
+        if (selectedItem != null) {
+            if (keyEvent.getCode().equals(KeyCode.DELETE)) {
                 deleteListedItem(selectedItem);
             }
         }
@@ -211,5 +235,29 @@ public class Controller {
         Todoitem item = toDoListView.getSelectionModel().getSelectedItem();
         textDisplay.setText(item.getDetails());
         deadlineLabel.setText(item.getDate().toString());
+    }
+
+    @FXML
+    public void filterPressButton() {
+        if (filterButton.isSelected()) {
+            filteredList.setPredicate(new Predicate<Todoitem>() {
+                @Override
+                public boolean test(Todoitem todoitem) {
+                    return (todoitem.getDate().equals(LocalDate.now()));
+                }
+            });
+        } else {
+            filteredList.setPredicate(new Predicate<Todoitem>() {
+                @Override
+                public boolean test(Todoitem todoitem) {
+                    return true;
+                }
+            });
+        }
+    }
+
+    @FXML
+    public void handleExit(){
+        Platform.exit();
     }
 }

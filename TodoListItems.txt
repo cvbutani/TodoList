@@ -1,0 +1,8 @@
+Birthday Card	Buy a birthday card from dollarama and send it to Sagar.	12-07-2018
+Call Skip	Call Skip the dishes and quit from skip network.	12-04-2018
+Cancel Gym membership	Cancel your gym membership at end of this month	30-04-2018
+Car Insurance	Pay car insurance on 16th of every month.	15-06-2018
+Mobile Bill	Pay mobile bill which is $51 and is due on 10th May.	20-05-2018
+Book USA Wichita Trip	Book ticket to visit CTDI facility in Wichita, Kansas.	15-04-2018
+Awesome	Its Working again.	20-04-2018
+Super	Superb	14-04-2018

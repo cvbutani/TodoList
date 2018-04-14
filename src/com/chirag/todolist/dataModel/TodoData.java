@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 public class TodoData {
     private static TodoData instance = new TodoData();
-    private static String fileName = "ToDOList.txt";
+    private static String fileName = "TodoListItems.txt";
 
     private ObservableList<Todoitem> todoItems;
     private DateTimeFormatter formatter;
