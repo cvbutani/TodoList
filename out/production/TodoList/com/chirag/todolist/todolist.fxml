@@ -17,6 +17,7 @@
         <MenuBar>
             <Menu text="File">
                 <MenuItem text="New" onAction="#showNewItemDialog"/>
+                <MenuItem text="Edit" onAction="#showEditItemDialog"/>
                 <MenuItem text="Exit"/>
             </Menu>
         </MenuBar>
@@ -27,7 +28,7 @@
     <center>
         <VBox style="-fx-background-color: white">
             <TextArea fx:id="textDisplay" VBox.vgrow="ALWAYS"
-                      style="-fx-font-family:Calibri Light; -fx-font-size: 20"/>
+                      style="-fx-font-family:Calibri Light; -fx-font-size: 20" wrapText="true"/>
             <HBox>
                 <Label text="Due on " >
                     <font>

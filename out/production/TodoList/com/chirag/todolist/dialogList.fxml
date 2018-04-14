@@ -13,9 +13,9 @@
     <content>
         <GridPane hgap="10" vgap="10">
             <Label text="Description: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="namePicker" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <TextField fx:id="namePicker"  GridPane.rowIndex="0" GridPane.columnIndex="1"/>
             <Label text="Detailed description: " GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextArea fx:id="detailPicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <TextArea fx:id="detailPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" wrapText="true"/>
             <Label text="Date: " GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <DatePicker fx:id="datePicker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
         </GridPane>

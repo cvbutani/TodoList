@@ -1,26 +1,23 @@
 package com.chirag.todolist.dataModel;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import java.util.List;
 
 public class TodoData {
     private static TodoData instance = new TodoData();
     private static String fileName = "ToDOList.txt";
 
-    private List<Todoitem> todoItems;
+    private ObservableList<Todoitem> todoItems;
     private DateTimeFormatter formatter;
 
     public static TodoData getInstance() {
@@ -31,16 +28,22 @@ public class TodoData {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyy");
     }
 
-    public List<Todoitem> getTodoItems() {
+    public ObservableList<Todoitem> getTodoItems() {
         return todoItems;
     }
 
-    public void setTodoItems(List<Todoitem> todoItems) {
+    public void setTodoItems(ObservableList<Todoitem> todoItems) {
         this.todoItems = todoItems;
     }
 
     public void addTodoItem(Todoitem item){
-        todoItems.add(item);
+        if (!todoItems.contains(item)) {
+            todoItems.add(item);
+        } else {
+            int index = todoItems.indexOf(item);
+            todoItems.remove(item);
+            todoItems.add(index, item);
+        }
     }
 
     public void loadTodoItems() throws IOException {
